@@ -130,4 +130,5 @@ There after you can add any torrents in the server."
 
 echo "your pi is going to reboot in 30 seconds"
 sleep 30
+sudo rm samba -y
 sudo reboot
