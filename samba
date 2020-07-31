@@ -35,8 +35,8 @@ echo "  directory mask = 0777 " >>  /etc/samba/smb.conf
 echo "  public = no" >>  /etc/samba/smb.conf
 echo "  force user = root " >>  /etc/samba/smb.conf
 
-sudo adduser stv
-sudo smbpasswd - a stv
+#sudo adduser stv
+sudo smbpasswd - a pi
 sudo /etc/init.d/smbd restart
 sudo /etc/init.d/nmbd restart 
 for ((i=1;i<=no;i++))
@@ -108,7 +108,26 @@ sudo systemctl status deluged
 sudo systemctl status deluge-web
 to display your ip address type the following command
 hostname-I 
+
+To access your torrent client you need to know the ip address 
+of this nas.
+
+Type '<IP-ADDRESS>:8112' in your browser connected to the 
+same local network as the nas. Then in the browser it will 
+ask for the password. the default password is 'deluge' .so 
+type 'deluge' for the password and press enter.
+it will ask you to update the defaut password. 
+There after you can add any torrents in the server. 
 " >> ReadMe.txt
-echo "your pi is going to reboot in 5 seconds"
-sleep 5
+
+echo"
+Type '<IP-ADDRESS>:8112' in your browser connected to the
+same local network as the nas. Then in the browser it will
+ask for the password. the default password is 'deluge' .so
+type 'deluge' for the password and press enter.
+it will ask you to update the defaut password.
+There after you can add any torrents in the server."
+
+echo "your pi is going to reboot in 30 seconds"
+sleep 30
 sudo reboot
