@@ -1,54 +1,5 @@
-echo "enter the number  of your external storage";
-lsblk
-echo "enter the number of disk"
-read no
-for (( i=0; i<no; ++i))
-do
-echo "enter the disk name"
-read disk[i]
-done
-echo "${disk[@]}"
 
-sudo apt update && sudo apt upgrade -y
-sudo apt-get install ntfs-3g -y
-sudo apt-get install exfat-utils exfat-fuse -y
-sudo apt-get remove samba samba-common-bin -y
-sudo apt-get install samba samba-common-bin -y
-
-sudo mkdir /PiServer
-sudo chmod 777 /PiServer
-
-for ((i=1;i<=no;i++))
-do
-sudo mkdir /PiServer/$i
-sudo chmod 777 /PiServer/$i
-sudo mount /dev/${disk[i-1]} /PiServer/$i
-done
-echo " [Raspberry Pi 4 Nas]" >>  /etc/samba/smb.conf
-echo " comment = "any_name" " >>  /etc/samba/smb.conf
-echo "  path = /PiServer" >>  /etc/samba/smb.conf
-echo "  browseable = yes " >>  /etc/samba/smb.conf
-echo "  read only = no " >>  /etc/samba/smb.conf
-echo "  writeable= yes " >>  /etc/samba/smb.conf
-echo "  create mask = 0777 " >>  /etc/samba/smb.conf
-echo "  directory mask = 0777 " >>  /etc/samba/smb.conf
-echo "  public = no" >>  /etc/samba/smb.conf
-echo "  force user = root " >>  /etc/samba/smb.conf
-
-#sudo adduser stv
-sudo smbpasswd - a pi
-sudo /etc/init.d/smbd restart
-sudo /etc/init.d/nmbd restart 
-for ((i=1;i<=no;i++))
-do 
-echo "/dev/${disk[i-1]} /PiServer/$i auto defaults, user 0 2"  >> /etc/fstab 
-done
-
-echo "installing chromium media edition"
-curl -fsSL https://pi.vpetkov.net -o ventz-media-pi
-sh ventz-media-pi
-sudo rm ventz-media-pi
-echo "installing torrent client"
+echo "Installing Torrent Client"
 sudo apt install deluged deluge-web deluge-console python-mako deluged -y
 sudo pkill -i deluged
 echo "enter your username for the torrent client:"
@@ -66,6 +17,7 @@ sleep 1
 hostname -I
 sudo rm /etc/systemd/system/deluged.service
 sudo rm /etc/systemd/system/deluge-web.service 
+
 sudo echo "
 [Unit]
 Description=Deluge Daemon
@@ -83,7 +35,9 @@ TimeoutStopSec=300
 [Install]
 WantedBy=multi-user.target
 ">> /etc/systemd/system/deluged.service
+
 sudo systemctl enable deluged.service
+
 sudo echo "
 [Unit]
 Description=Deluge Web Interface
@@ -103,16 +57,18 @@ WantedBy=multi-user.target
 ">>/etc/systemd/system/deluge-web.service
 sudo systemctl enable deluge-web.service
 
-echo "To check your torrent client status enter the following commands in terminal:
+echo "
+To check your torrent client status enter the following commands in terminal:
 sudo systemctl status deluged
 sudo systemctl status deluge-web
 to display your ip address type the following command
+
 hostname-I 
 
 To access your torrent client you need to know the ip address 
 of this nas.
 
-Type '<IP-ADDRESS>:8112' in your browser connected to the 
+Type	<IP-ADDRESS>:8112	 in your browser connected to the 
 same local network as the nas. Then in the browser it will 
 ask for the password. the default password is 'deluge' .so 
 type 'deluge' for the password and press enter.
@@ -128,7 +84,4 @@ type 'deluge' for the password and press enter.
 it will ask you to update the defaut password.
 There after you can add any torrents in the server."
 
-echo "your pi is going to reboot in 30 seconds"
-sleep 30
-sudo rm samba -y
 sudo reboot
