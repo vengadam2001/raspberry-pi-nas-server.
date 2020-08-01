@@ -94,7 +94,7 @@ TimeoutStopSec=300
 
 [Install]
 WantedBy=multi-user.target
-">> /etc/systemd/system/deluged.service
+" >> /etc/systemd/system/deluged.service
 sudo systemctl enable deluged.service
 sudo echo "
 [Unit]
@@ -112,7 +112,7 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-">>/etc/systemd/system/deluge-web.service
+" >> /etc/systemd/system/deluge-web.service
 sudo systemctl enable deluge-web.service
 
 echo "To check your torrent client status enter the following commands in terminal:
