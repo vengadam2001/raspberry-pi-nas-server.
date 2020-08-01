@@ -10,16 +10,16 @@ enter the number  of your external storage";
 
 lsblk
 
-echo "enter the number of disk"
+echo "enter the number of disk:"
 read no
 for (( i=0; i<no; ++i))
 do
-echo "enter the disk name"
+echo "enter the disk name:"
 read disk[i]
 done
-echo "${disk[@]}"
+#echo "${disk[@]}"
 
-udo apt upgrade -y
+sudo apt upgrade -y
 sudo apt-get remove samba samba-common-bin -y
 sudo apt-get install samba samba-common-bin -y
 
@@ -44,12 +44,15 @@ echo "  public = no" >>  /etc/samba/smb.conf
 echo "  force user = root " >>  /etc/samba/smb.conf
 
 #sudo adduser stv
-sudo smbpasswd - a pi
+echo "enter your nas password (Note:you cannot see what password you are entering):"
+sudo smbpasswd -a pi
 sudo /etc/init.d/smbd restart
 sudo /etc/init.d/nmbd restart 
+
 for ((i=1;i<=no;i++))
 do 
-echo "/dev/${disk[i-1]} /PiServer/$i auto defaults, user 0 2"  >> /etc/fstab 
+echo "
+/dev/${disk[i-1]} /PiServer/$i auto defaults, user 0 2"  >> /etc/fstab 
 done
 
 echo "installing chromium media edition"
@@ -59,11 +62,12 @@ sudo rm ventz-media-pi
 echo "installing torrent client"
 sudo apt install deluged deluge-web deluge-console python-mako deluged -y
 sudo pkill -i deluged
-echo "enter your username for the torrent client:"
-read user
-echo "enter your password for the torrent client:"
-read pass
-sudo echo "<$user>:<$pass>:10" >> ~/.config/deluge/auth
+#echo "enter your username for the torrent client:"
+#read user
+#echo "enter your password for the torrent client:"
+#read pass
+#sudo echo "<$user>:<$pass>:10" >> ~/.config/deluge/auth
+sudo echo "<pi>:<deluge>:10" >> ~/.config/deluge/auth
 deluged
 sleep 1
 deluge-console "config -s allow_remote True"
