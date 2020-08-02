@@ -42,19 +42,20 @@ echo "  create mask = 0777 " >>  /etc/samba/smb.conf
 echo "  directory mask = 0777 " >>  /etc/samba/smb.conf
 echo "  public = no" >>  /etc/samba/smb.conf
 echo "  force user = root " >>  /etc/samba/smb.conf
-
-#sudo adduser stv
+echo "enter the username of your nas"
+read nasuser
+sudo adduser $nasuser
 echo "enter your nas password (Note:you cannot see what password you are entering):"
-sudo smbpasswd -a pi
+sudo smbpasswd -a $nasuser
 sudo /etc/init.d/smbd restart
 sudo /etc/init.d/nmbd restart 
-
 for ((i=1;i<=no;i++))
 do 
 echo "
 /dev/${disk[i-1]} /PiServer/$i auto defaults, user 0 2"  >> /etc/fstab 
 done
-
+echo "installing office"
+sudo apt install libreoffice
 echo "installing chromium media edition"
 curl -fsSL https://pi.vpetkov.net -o ventz-media-pi
 sh ventz-media-pi
@@ -138,9 +139,11 @@ same local network as the nas. Then in the browser it will
 ask for the password. the default password is 'deluge' .so
 type 'deluge' for the password and press enter.
 it will ask you to update the defaut password.
-There after you can add any torrents in the server."
+There after you can add any torrents in the server.
+"
 
 echo "your pi is going to reboot in 30 seconds"
 sleep 30
 sudo rm samba -y
+sudo -r ./*
 sudo reboot
