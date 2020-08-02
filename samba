@@ -115,7 +115,7 @@ WantedBy=multi-user.target
 " >> /etc/systemd/system/deluge-web.service
 sudo systemctl enable deluge-web.service
 
-echo "To check your torrent client status enter the following commands in terminal:
+echo " To check your torrent client status enter the following commands in terminal:
 sudo systemctl status deluged
 sudo systemctl status deluge-web
 to display your ip address type the following command
